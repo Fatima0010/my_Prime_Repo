@@ -8,7 +8,7 @@ using namespace std;
 
 // Initial commit: added isPrime function to check if a number is prime
 // Function to check if a number is prime
-bool isPrime(int num) 
+bool isPrime(int num)
 {
     if (num <= 1) return false;
     for (int i = 2; i * i <= num; ++i) 
@@ -19,32 +19,41 @@ bool isPrime(int num)
 }
 
 // Function to generate a prime number maze
-void generateMaze(int size, int range) 
+void generateMaze(int size, int range, bool displayCharacters) 
 {
-    vector<vector<char>> maze(size, vector<char>(size, ' '));
+    vector<vector<int>> maze(size, vector<int>(size, 0));
 
-    for (int i = 0; i < size; ++i)
+    for (int i = 0; i < size; ++i) 
     {
         for (int j = 0; j < size; ++j) 
         {
             int num = rand() % range;  // Random number between 0 and range
-            if (isPrime(num))
-            {
-                maze[i][j] = 'P';  // Mark prime numbers with 'P'
-            }
-            else 
-            {
-                maze[i][j] = '.';  // Mark non-prime numbers with '.'
-            }
+            maze[i][j] = num; // Store the number in the maze
         }
     }
 
     // Print the maze
-    for (const auto &row : maze)
+    for (const auto &row : maze) 
     {
-        for (const auto &cell : row)
+        for (const auto &cell : row) 
         {
-            cout << cell << ' ';
+            if (displayCharacters) 
+            {
+                // Display as characters
+                if (isPrime(cell)) 
+                {
+                    cout << 'P' << ' ';  // Mark prime numbers with 'P'
+                }
+                else
+                {
+                    cout << '.' << ' ';  // Mark non-prime numbers with '.'
+                }
+            } 
+            else
+            {
+                // Display numbers
+                cout << cell << ' ';
+            }
         }
         cout << endl;
     }
@@ -54,10 +63,11 @@ int main()
 {
     srand(static_cast<unsigned int>(time(0)));  // Seed for random number generation
     int size, range;
+    char displayOption;
 
     // Input validation for maze size
-    while (true) 
-    {
+    while (true)
+        {
         cout << "Enter the size of the maze (positive integer): ";
         cin >> size;
 
@@ -66,15 +76,15 @@ int main()
             cin.clear(); // Clear the error flag
             cin.ignore(numeric_limits<streamsize>::max(), '\n'); // Ignore the invalid input
             cout << "Invalid input. Please enter a positive integer." << endl;
-        } 
-        else 
+        }
+        else
         {
             break; // Valid input, exit loop
         }
     }
 
     // Input validation for range
-    while (true)
+    while (true) 
     {
         cout << "Enter the upper limit for random numbers (positive integer): ";
         cin >> range;
@@ -84,13 +94,34 @@ int main()
             cin.clear(); // Clear the error flag
             cin.ignore(numeric_limits<streamsize>::max(), '\n'); // Ignore the invalid input
             cout << "Invalid input. Please enter a positive integer." << endl;
-        } 
-        else
+        }
+        else 
         {
             break; // Valid input, exit loop
         }
     }
 
-    generateMaze(size, range);
+    // Input for display option
+    while (true) 
+    {
+        cout << "Do you want to display characters (P for prime, . for non-prime) or numbers? (Enter 'c' for characters, 'n' for numbers): ";
+        cin >> displayOption;
+
+        if (displayOption == 'c' || displayOption == 'C')
+        {
+            generateMaze(size, range, true);
+            break;
+        } 
+        else if (displayOption == 'n' || displayOption == 'N') 
+        {
+            generateMaze(size, range, false);
+            break;
+        }
+        else 
+        {
+            cout << "Invalid option. Please enter 'c' or 'n'." << endl;
+        }
+    }
+
     return 0;
 }
