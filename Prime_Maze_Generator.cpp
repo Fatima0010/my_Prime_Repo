@@ -5,11 +5,12 @@
 
 using namespace std;
 
+// Initial commit: added isPrime function to check if a number is prime
 // Function to check if a number is prime
 bool isPrime(int num) 
 {
     if (num <= 1) return false;
-    for (int i = 2; i * i <= num; ++i) 
+    for (int i = 2; i * i <= num; ++i)
     {
         if (num % i == 0) return false;
     }
@@ -21,16 +22,16 @@ void generateMaze(int size)
 {
     vector<vector<char>> maze(size, vector<char>(size, ' '));
 
-    for (int i = 0; i < size; ++i)
+    for (int i = 0; i < size; ++i) 
     {
-        for (int j = 0; j < size; ++j) 
+        for (int j = 0; j < size; ++j)
         {
             int num = rand() % 100;  // Random number between 0 and 99
             if (isPrime(num)) 
             {
                 maze[i][j] = 'P';  // Mark prime numbers with 'P'
             }
-            else
+            else 
             {
                 maze[i][j] = '.';  // Mark non-prime numbers with '.'
             }
@@ -38,9 +39,9 @@ void generateMaze(int size)
     }
 
     // Print the maze
-    for (const auto& row : maze)
+    for (const auto &row : maze)
     {
-        for (const auto& cell : row)
+        for (const auto &cell : row)
         {
             cout << cell << ' ';
         }
@@ -48,13 +49,28 @@ void generateMaze(int size)
     }
 }
 
-int main() 
+int main()
 {
     srand(static_cast<unsigned int>(time(0)));  // Seed for random number generation
     int size;
 
-    cout << "Enter the size of the maze: ";
-    cin >> size;
+    // Input validation loop
+    while (true) 
+    {
+        cout << "Enter the size of the maze (positive integer): ";
+        cin >> size;
+
+        if (cin.fail() || size <= 0) 
+        {
+            cin.clear(); // Clear the error flag
+            cin.ignore(numeric_limits<streamsize>::max(), '\n'); // Ignore the invalid input
+            cout << "Invalid input. Please enter a positive integer." << endl;
+        } 
+        else 
+        {
+            break; // Valid input, exit loop
+        }
+    }
 
     generateMaze(size);
     return 0;
